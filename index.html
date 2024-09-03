@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LNGI using Birds Array Notation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        .number {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Large Numbers Gradually Increasing (LNGI) Using Birds Array Notation</h1>
+    <div id="numbers"></div>
+
+    <script>
+        function birdsArray(...values) {
+            if (values.length === 1) {
+                return values[0];
+            }
+            if (values.length === 2) {
+                return values[0] ** values[1];
+            }
+            return 'Invalid number of entries';
+        }
+
+        function birdsArrayNested(a, b, c) {
+            // Computes a^(a^b) for {a, {b, c}}
+            const inner = birdsArray(b, c);
+            return birdsArray(a, inner);
+        }
+
+        function displayLNGI() {
+            const container = document.getElementById('numbers');
+            let values = [
+                {entries: [2], description: 'Single entry: {2}'},
+                {entries: [2, 3], description: 'Two entries: {2, 3}'},
+                {entries: [2, 2], description: 'Two entries with both 2: {2, 2}'},
+                {entries: [1, 1], description: 'Two entries with both 1: {1, 1}'},
+                {a: 2, b: 2, c: 3, description: '{2, {2, 3}} = 2^(2^3)'}
+            ];
+
+            values.forEach((item, index) => {
+                let value;
+                if (item.entries) {
+                    value = birdsArray(...item.entries);
+                } else if (item.a !== undefined && item.b !== undefined && item.c !== undefined) {
+                    value = birdsArrayNested(item.a, item.b, item.c);
+                }
+                const numberElement = document.createElement('div');
+                numberElement.className = 'number';
+                numberElement.textContent = `${item.description} = ${value}`;
+                container.appendChild(numberElement);
+            });
+        }
+
+        displayLNGI();
+    </script>
+</body>
+</html>
